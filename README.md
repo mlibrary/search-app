@@ -1,3 +1,5 @@
+# Search app
+
 A training front-end application for Library Search to learn what it would take to build with the latest design system version and with Gatsby.
 
 ## 🚀 Quick start
