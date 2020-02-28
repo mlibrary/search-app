@@ -5,14 +5,13 @@ import { Metadata } from "../../metadata"
 
 export default function Result({ uid }) {
   const [{ records }] = useSearch()
-  const { names, datastore, metadata } = records[uid]
+  const { names, datastore, metadata, ...rest } = records[uid]
 
   return (
     <>
       <Link
-        href={`https://search.lib.umich.edu/${metadata_key[datastore].slug}/record/${uid}`}
+        href={`https://search.lib.umich.edu/${metadata_key[datastore].slug}/record/${rest.uid}`}
         css={{
-          display: "inline-block",
           fontWeight: "700",
           fontSize: "1.20rem",
           textDecoration: "underline",

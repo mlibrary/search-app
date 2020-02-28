@@ -1,14 +1,5 @@
 import React from "react"
-import {
-  COLORS,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  SPACING,
-  TYPOGRAPHY,
-  Margins,
-} from "@umich-lib/core"
+import { COLORS, Tabs, TabList, Tab, TabPanel, SPACING } from "@umich-lib/core"
 import { useSearch, metadata_key } from "./search-provider"
 import Result from "./search-result"
 
@@ -20,6 +11,7 @@ function DatastoreResults({ uid }) {
       <ol
         css={{
           listStyle: "decimal",
+          listStylePosition: "inside",
           marginTop: SPACING["M"],
         }}
       >

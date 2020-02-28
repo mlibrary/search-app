@@ -20,7 +20,7 @@ export default function SearchBox() {
           css={{
             maxWidth: "480px",
             margin: "0 auto",
-            marginTop: SPACING["3XL"],
+            marginTop: "10vh",
           }}
         />
       )}

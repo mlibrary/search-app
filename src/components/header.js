@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
-import { SPACING, TYPOGRAPHY, COLORS } from "@umich-lib/core"
+import { SPACING, MEDIA_QUERIES } from "@umich-lib/core"
 import Navigation from "./navigation"
 import Logo from "./logo"
 
@@ -9,9 +9,14 @@ export default function Header() {
     <header
       css={{
         margin: `${SPACING["S"]} 0`,
-        display: "flex",
-        justifyContent: "space-between",
-        alignContent: "center",
+        "> *:first-child": {
+          marginBottom: SPACING["S"],
+        },
+        [MEDIA_QUERIES.LARGESCREEN]: {
+          display: "flex",
+          justifyContent: "space-between",
+          alignContent: "center",
+        },
       }}
     >
       <Logo size={30} />
