@@ -22,6 +22,7 @@ const Layout = props => (
         "*:focus": {
           boxShadow: `0 0 0 2px ${COLORS.maize["400"]},0 0 0 3px ${COLORS.neutral["400"]}`,
           borderRadius: "2px",
+          outline: 0,
         },
       }}
     />
