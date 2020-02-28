@@ -16,6 +16,9 @@ export default function Header() {
           display: "flex",
           justifyContent: "space-between",
           alignContent: "center",
+          "> *:first-child": {
+            margin: 0,
+          },
         },
       }}
     >
