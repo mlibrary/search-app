@@ -6,6 +6,7 @@ import {
   UniversalHeader,
   Margins,
   SPACING,
+  COLORS,
 } from "@umich-lib/core"
 import { SearchProvider, SearchBox } from "../modules/search"
 import Footer from "../components/footer"
@@ -17,6 +18,10 @@ const Layout = props => (
       styles={{
         "html, body, #___gatsby, #___gatsby > div": {
           height: "100%",
+        },
+        "*:focus": {
+          boxShadow: `0 0 0 2px ${COLORS.maize["400"]},0 0 0 3px ${COLORS.neutral["400"]}`,
+          borderRadius: "2px",
         },
       }}
     />

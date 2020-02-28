@@ -9,28 +9,34 @@ export default function Result({ uid }) {
 
   return (
     <>
-      <Link
+      <a
         href={`https://search.lib.umich.edu/${metadata_key[datastore].slug}/record/${rest.uid}`}
         css={{
+          color: COLORS.teal["400"],
           fontWeight: "700",
           fontSize: "1.20rem",
           textDecoration: "underline",
           textDecorationColor: COLORS.teal["200"],
           textDecorationThickness: "2px",
           textUnderlineOffset: "3px",
-          ":hover": {
+          ":hover, :focus": {
             textDecorationColor: COLORS.teal["400"],
           },
-          boxShadow: "none",
           marginBottom: SPACING["S"],
         }}
       >
         {[].concat(names).map((name, i) => (
           <span key={i + name}>{name}</span>
         ))}
-      </Link>
+      </a>
 
-      <Metadata data={metadata["medium"]} />
+      <div
+        css={{
+          marginTop: SPACING["XS"],
+        }}
+      >
+        <Metadata data={metadata["medium"]} />
+      </div>
     </>
   )
 }
