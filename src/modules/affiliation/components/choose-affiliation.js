@@ -99,7 +99,9 @@ export default function ChooseAffiliation() {
               marginBottom: SPACING["M"],
             }}
           >
-            <Button onClick={() => setOpen(false)}>Continue as {label}</Button>
+            <Button onClick={() => setOpen(false)} kind="primary">
+              Continue as {label}
+            </Button>
             <span
               css={{
                 margin: `${SPACING["2XS"]} 0`,

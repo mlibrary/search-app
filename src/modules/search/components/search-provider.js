@@ -230,20 +230,20 @@ export const metadata_key = {
     name: "Catalog",
     slug: "catalog",
   },
-  journals: {
-    name: "Online Journals",
-    slug: "onlinejournals",
-  },
   articlesplus: {
     name: "Articles",
     slug: "articles",
   },
-  website: {
-    name: "Website",
-    slug: "website",
-  },
   databases: {
     name: "Databases",
     slug: "databases",
+  },
+  journals: {
+    name: "Online Journals",
+    slug: "onlinejournals",
+  },
+  website: {
+    name: "Website",
+    slug: "website",
   },
 }

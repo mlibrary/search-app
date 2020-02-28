@@ -1,5 +1,14 @@
 import React from "react"
-import { COLORS, Tabs, TabList, Tab, TabPanel, SPACING } from "@umich-lib/core"
+import {
+  COLORS,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  SPACING,
+  TYPOGRAPHY,
+  Margins,
+} from "@umich-lib/core"
 import { useSearch, metadata_key } from "./search-provider"
 import Result from "./search-result"
 
@@ -45,12 +54,19 @@ export default function SearchResults() {
       aria-label="results"
       css={{
         marginTop: SPACING["XS"],
-        "> ul": {
-          justifyContent: "center",
-        },
       }}
     >
-      <Tabs onChange={index => console.log("onChange", index)}>
+      <Tabs
+        onChange={index => console.log("onChange", index)}
+        css={{
+          "> ul": {
+            justifyContent: "center",
+            "> li": {
+              fontSize: "1.125rem",
+            },
+          },
+        }}
+      >
         <TabList>
           {Object.keys(metadata_key).map(key => (
             <Tab key={key}>{metadata_key[key].name}</Tab>
