@@ -39,7 +39,8 @@ export default function Dialog({ onDismiss, children }) {
             right: 0,
             top: 0,
             textDecoration: "underline",
-            padding: SPACING["L"],
+            padding: SPACING["S"],
+            margin: SPACING["M"],
           }}
         >
           Dismiss
