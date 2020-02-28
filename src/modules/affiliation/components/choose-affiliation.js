@@ -94,8 +94,10 @@ export default function ChooseAffiliation() {
 
           <div
             css={{
-              display: "flex",
-              alignItems: "baseline",
+              [MEDIA_QUERIES.LARGESCREEN]: {
+                display: "flex",
+                alignItems: "baseline",
+              },
               marginBottom: SPACING["M"],
             }}
           >
@@ -104,6 +106,7 @@ export default function ChooseAffiliation() {
             </Button>
             <span
               css={{
+                display: "inline-block",
                 margin: `${SPACING["2XS"]} 0`,
                 [MEDIA_QUERIES.LARGESCREEN]: {
                   margin: `0 ${SPACING["S"]}`,
