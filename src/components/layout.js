@@ -24,6 +24,9 @@ const Layout = props => (
           borderRadius: "2px",
           outline: 0,
         },
+        "#gatsby-focus-wrapper:focus": {
+          boxShadow: "none",
+        },
       }}
     />
     <GlobalStyleSheet />
