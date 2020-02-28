@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "search-training-app",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "A training application for Library Search and to learn what it would take to build with the latest design system version and with Gatsby.",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Jon Earley <earleyj@umich.edu>",
   "dependencies": {
     "@reach/dialog": "^0.8.5",
     "@reach/visually-hidden": "^0.8.2",
@@ -45,9 +45,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/mlibrary/search-app"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/mlibrary/search-app/issues"
   }
 }
