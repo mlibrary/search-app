@@ -1,10 +1,19 @@
 import React from "react"
-import { COLORS, Tabs, TabList, Tab, TabPanel, SPACING } from "@umich-lib/core"
+import {
+  COLORS,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  SPACING,
+  Margins,
+  Loading,
+} from "@umich-lib/core"
 import { useSearch, metadata_key } from "./search-provider"
 import Result from "./search-result"
 
 function DatastoreResults({ uid }) {
-  const [{ results }] = useSearch()
+  const [{ results, status }] = useSearch()
 
   if (results && results[uid]) {
     return (
@@ -31,23 +40,28 @@ function DatastoreResults({ uid }) {
     )
   }
 
+  if (status === "loading") {
+    return (
+      <div
+        css={{
+          display: "flex",
+          justifyContent: "center",
+          margin: "10vh 0",
+        }}
+      >
+        <Loading />
+      </div>
+    )
+  }
+
   return null
 }
 
 export default function SearchResults() {
-  const [{ status }] = useSearch()
-
-  if (status !== "searching") {
-    return null
-  }
+  const [{ results, status }] = useSearch()
 
   return (
-    <section
-      aria-label="results"
-      css={{
-        marginTop: SPACING["XS"],
-      }}
-    >
+    <section aria-label="results">
       <Tabs
         onChange={index => console.log("onChange", index)}
         css={{
@@ -66,7 +80,9 @@ export default function SearchResults() {
         </TabList>
         {Object.keys(metadata_key).map(key => (
           <TabPanel key={key}>
-            <DatastoreResults uid={key} />
+            <Margins>
+              <DatastoreResults uid={key} />
+            </Margins>
           </TabPanel>
         ))}
       </Tabs>

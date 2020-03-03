@@ -1,87 +1,63 @@
 import React from "react"
-import {
-  Margins,
-  SPACING,
-  COLORS,
-  TextInput,
-  Button,
-  Icon,
-} from "@umich-lib/core"
+import { SPACING, COLORS, TextInput, Button, Icon } from "@umich-lib/core"
+import VisuallyHidden from "@reach/visually-hidden"
 import { useSearch } from "./search-provider"
-import Img from "../../../components/image"
 
 export default function SearchBox() {
-  const [{ query, status }, dispatch] = useSearch()
+  const [{ query }, dispatch] = useSearch()
 
   return (
-    <>
-      {status !== "searching" && (
-        <Img
-          css={{
-            maxWidth: "480px",
-            margin: "0 auto",
-            marginTop: "10vh",
-          }}
-        />
-      )}
-      <form
-        aria-label="search box"
-        onSubmit={e => {
-          e.preventDefault()
+    <form
+      aria-label="search box"
+      onSubmit={e => {
+        e.preventDefault()
 
-          dispatch({
-            type: "setRun",
-            run: true,
-          })
-        }}
+        dispatch({
+          type: "setRun",
+          run: true,
+        })
+      }}
+      css={{
+        width: "100%",
+        marginRight: SPACING["XL"],
+        marginLeft: SPACING["S"],
+        gridArea: "search-box",
+        maxWidth: "42rem",
+      }}
+    >
+      <div
         css={{
-          width: "100%",
-          margin: "0 auto",
-          gridArea: "search-box",
-          maxWidth: "42rem",
-          marginTop: SPACING["M"],
+          display: "flex",
+          alignItems: "flex-end",
+          input: {
+            height: "40px",
+            borderColor: COLORS.neutral["300"],
+          },
         }}
       >
-        <div
+        <TextInput
+          id="search-query"
+          labelText="Search for books, articles, and more"
+          hideLabel={true}
+          type="search"
+          name="query"
+          value={query}
+          onChange={e => {
+            dispatch({ type: "setQuery", query: e.target.value })
+          }}
+        />
+        <Button
+          type="submit"
+          kind="primary"
           css={{
-            display: "flex",
-            alignItems: "flex-end",
-            input: {
-              height: "40px",
-              borderColor: COLORS.neutral["300"],
-            },
+            whiteSpace: "nowrap",
+            marginLeft: SPACING["XS"],
           }}
         >
-          <TextInput
-            id="search-query"
-            labelText="Search for books, articles, and more"
-            hideLabel={status === "searching"}
-            type="search"
-            name="query"
-            value={query}
-            onChange={e => {
-              dispatch({ type: "setQuery", query: e.target.value })
-            }}
-          />
-          <Button
-            type="submit"
-            kind="primary"
-            css={{
-              whiteSpace: "nowrap",
-              marginLeft: SPACING["XS"],
-            }}
-          >
-            <Icon icon="search" size="18" />{" "}
-            <span
-              css={{
-                marginLeft: SPACING["2XS"],
-              }}
-            >
-              Search
-            </span>
-          </Button>
-        </div>
-      </form>
-    </>
+          <Icon icon="search" size="18" />
+          <VisuallyHidden>Search</VisuallyHidden>
+        </Button>
+      </div>
+    </form>
   )
 }

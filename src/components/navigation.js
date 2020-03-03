@@ -7,6 +7,7 @@ export default function Navigation() {
     <ul
       css={{
         display: "flex",
+        flexShrink: "0",
         "> li": {
           ":not(:last-of-type)": {
             marginRight: SPACING["L"],

@@ -52,6 +52,7 @@ function Logo({ size, kind }) {
     <div
       css={{
         lineHeight: "0",
+        flexShrink: "0",
         a: {
           display: "inline-block",
         },

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react"
 import { Pride } from "pride"
+import { Location } from "@reach/router"
+const qs = require("qs")
 
 Pride.Settings.datastores_url =
   "https://search-staging.www.lib.umich.edu/spectrum"
@@ -29,14 +31,6 @@ export default function SearchProvider({ children }) {
           ...state,
           status: action.status,
         }
-      case "setResults":
-        return {
-          ...state,
-          results: {
-            ...state.results,
-            ...action.results,
-          },
-        }
       case "addDatastore":
         return {
           ...state,
@@ -49,7 +43,7 @@ export default function SearchProvider({ children }) {
         return {
           ...state,
           run: action.run,
-          status: "searching",
+          status: "loading",
         }
       case "setQuery":
         return {
@@ -83,17 +77,28 @@ export default function SearchProvider({ children }) {
   }
 
   return (
-    <StateProvider initialState={initialState} reducer={reducer}>
-      <Search />
-      {children}
-    </StateProvider>
+    <Location>
+      {({ location }) => (
+        <StateProvider initialState={initialState} reducer={reducer}>
+          <Search />
+          {children}
+        </StateProvider>
+      )}
+    </Location>
   )
 }
 
 let searcher
 
-function Search() {
-  const [{ status, run, query }, dispatch] = useSearch()
+function useUrlState({ search }) {
+  return qs.parse(search, { ignoreQueryPrefix: true })
+}
+
+function Search({ search }) {
+  const urlState = useUrlState({ search })
+  const [{ status, run, query }, dispatch] = useSearch({
+    query: urlState.query ? urlState.query : "",
+  })
 
   useEffect(() => {
     if (searcher && run) {
