@@ -6,32 +6,37 @@ import {
   Tab,
   TabPanel,
   SPACING,
-  Margins,
   Loading,
 } from "@umich-lib/core"
 import { useSearch, metadata_key } from "./search-provider"
 import Result from "./search-result"
 import Number from "../../../components/number"
+import { Layout, LayoutFull } from "../../reusable"
 
 function DatastoreResults({ uid }) {
-  const [{ datastores, results, status, resultMetadata }] = useSearch()
+  const [{ results, status, resultMetadata }] = useSearch()
 
   if (results && results[uid]) {
     const { totalAvailable } = resultMetadata[uid]
-    const { name } = datastores[uid]
 
     return (
-      <React.Fragment>
-        <p
+      <Layout>
+        <LayoutFull
           css={{
-            borderBottom: `solid 1px ${COLORS.neutral[100]}`,
-            paddingTop: SPACING["2XS"],
-            paddingBottom: SPACING["S"],
-            marginBottom: SPACING["M"],
+            background: COLORS.blue["100"],
           }}
         >
-          1 to 10 of <Number num={totalAvailable} /> {name} results
-        </p>
+          <Layout>
+            <p
+              css={{
+                fontWeight: "600",
+                padding: `${SPACING["S"]} 0`,
+              }}
+            >
+              1 to 10 of <Number num={totalAvailable} /> results
+            </p>
+          </Layout>
+        </LayoutFull>
         <ol
           css={{
             listStyle: "decimal",
@@ -52,7 +57,7 @@ function DatastoreResults({ uid }) {
             </li>
           ))}
         </ol>
-      </React.Fragment>
+      </Layout>
     )
   }
 
@@ -85,6 +90,15 @@ export default function SearchResults() {
               fontSize: "1.125rem",
             },
           },
+          ".react-tabs__tab-panel": {
+            padding: "0",
+          },
+          ".react-tabs__tab-list": {
+            paddingTop: SPACING["2XS"],
+            background: "white",
+            position: "sticky",
+            top: "0",
+          },
         }}
       >
         <TabList>
@@ -94,9 +108,7 @@ export default function SearchResults() {
         </TabList>
         {Object.keys(metadata_key).map(key => (
           <TabPanel key={key}>
-            <Margins>
-              <DatastoreResults uid={key} />
-            </Margins>
+            <DatastoreResults uid={key} />
           </TabPanel>
         ))}
       </Tabs>

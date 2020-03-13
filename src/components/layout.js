@@ -1,14 +1,8 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { Global } from "@emotion/core"
-import {
-  GlobalStyleSheet,
-  UniversalHeader,
-  Margins,
-  SPACING,
-  COLORS,
-} from "@umich-lib/core"
-import { SearchProvider, SearchBox } from "../modules/search"
+import { GlobalStyleSheet, UniversalHeader, COLORS } from "@umich-lib/core"
+import { SearchProvider } from "../modules/search"
 import Footer from "../components/footer"
 import Header from "../components/header"
 

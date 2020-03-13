@@ -10,8 +10,6 @@ import {
   Icon,
   SPACING,
   MEDIA_QUERIES,
-  TYPOGRAPHY,
-  COLORS,
 } from "@umich-lib/core"
 
 export default function ChooseAffiliation() {

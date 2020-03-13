@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, SPACING, COLORS } from "@umich-lib/core"
+import { SPACING, COLORS } from "@umich-lib/core"
 import { useSearch, metadata_key } from "./search-provider"
 import { Metadata } from "../../metadata"
 

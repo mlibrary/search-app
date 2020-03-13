@@ -194,7 +194,7 @@ function Description({ data }) {
   )
 }
 
-function DescriptionItem({ icon, href, search, children }) {
+function DescriptionItem({ href, search, children }) {
   if (href || search) {
     return (
       <DescriptionItemLink href={href} search={search}>
@@ -209,7 +209,7 @@ function DescriptionItem({ icon, href, search, children }) {
 function DescriptionItemLink({ href, search, children }) {
   if (href) {
     return (
-      <a css={LINK_STYLES["default"]} href={href}>
+      <a css={LINK_STYLES["subtle"]} href={href}>
         {children}
       </a>
     )

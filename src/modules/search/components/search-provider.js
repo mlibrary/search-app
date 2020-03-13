@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react"
 import { Pride } from "pride"
-import router, { Location } from "@reach/router"
+import { useLocation, navigate } from "@reach/router"
 const qs = require("qs")
 
 Pride.Settings.datastores_url =
@@ -16,17 +16,42 @@ const StateProvider = ({ reducer, initialState, children }) => (
 
 export const useSearch = () => useContext(StateContext)
 
+function useInitialSearchState() {
+  const location = useLocation()
+  const { query } = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  })
+
+  return {
+    query: query ? query : "",
+    run: query && query.length > 0, // if we have a query
+  }
+}
+
+function createStateInURLString({ query }) {
+  const string = qs.stringify(
+    {
+      query: query.length > 0 ? query : undefined,
+    },
+    {
+      format: "RFC1738",
+      allowDots: true,
+      arrayFormat: "repeat",
+      encodeValuesOnly: true,
+    }
+  )
+
+  return string
+}
+
 export default function SearchProvider({ children }) {
-  // TODO
-  // create initial state here.
-
-  console.log("router", router)
-
+  const { run, query } = useInitialSearchState()
   const initialState = {
+    run,
+    query: query,
     status: "initializing",
     results: null,
-    run: false,
-    query: "",
+    stateInURLString: "",
   }
 
   function reducer(state, action) {
@@ -54,6 +79,9 @@ export default function SearchProvider({ children }) {
         return {
           ...state,
           query: action.query,
+          stateInURLString: createStateInURLString({
+            query: action.query,
+          }),
         }
       case "addRecords":
         return {
@@ -86,25 +114,17 @@ export default function SearchProvider({ children }) {
   }
 
   return (
-    <Location>
-      {({ location }) => (
-        <StateProvider initialState={initialState} reducer={reducer}>
-          <Search />
-          {children}
-        </StateProvider>
-      )}
-    </Location>
+    <StateProvider initialState={initialState} reducer={reducer}>
+      <Search />
+      {children}
+    </StateProvider>
   )
 }
 
 let searcher
 
-function useUrlState({ search }) {
-  return qs.parse(search, { ignoreQueryPrefix: true })
-}
-
-function Search({ search }) {
-  const [{ status, run, query }, dispatch] = useSearch()
+function Search() {
+  const [{ status, run, query, stateInURLString }, dispatch] = useSearch()
 
   useEffect(() => {
     if (searcher && run) {
@@ -126,6 +146,17 @@ function Search({ search }) {
       })
     }
   })
+
+  // Sync the state to the URL
+  useEffect(() => {
+    if (stateInURLString.length > 0) {
+      navigate("?" + stateInURLString, { replace: true })
+    } else if (status !== "initializing") {
+      // Only do this after initializing state.
+      navigate("/", { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stateInURLString])
 
   useEffect(() => {
     function handleResults(datastore, results, resultMetadata) {
@@ -178,7 +209,7 @@ function Search({ search }) {
       */
       const datastores = Pride.AllDatastores.array
 
-      datastores.map(datastore => {
+      datastores.forEach(datastore => {
         dispatch({
           type: "addDatastore",
           datastore: {
@@ -239,7 +270,7 @@ function Search({ search }) {
         },
       })
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   return null
 }
