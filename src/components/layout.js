@@ -28,11 +28,10 @@ const Layout = props => (
       css={{
         minHeight: "100%",
         display: "grid",
-        gridTemplateRows: "auto auto 1fr auto",
+        gridTemplateRows: "auto 1fr auto",
         gridTemplateColumns: "100%",
       }}
     >
-      <UniversalHeader />
       <SearchProvider>
         <Header />
         {props.children}
