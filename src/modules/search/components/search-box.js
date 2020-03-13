@@ -19,8 +19,6 @@ export default function SearchBox() {
       }}
       css={{
         width: "100%",
-        marginRight: SPACING["XL"],
-        marginLeft: SPACING["S"],
         gridArea: "search-box",
         maxWidth: "42rem",
       }}

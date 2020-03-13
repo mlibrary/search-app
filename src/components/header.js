@@ -12,7 +12,7 @@ export default function Header() {
           marginTop: SPACING["S"],
           marginBottom: SPACING["2XS"],
           alignItems: "center",
-          "> *:first-child": {
+          "> *": {
             marginBottom: SPACING["S"],
           },
           [MEDIA_QUERIES.LARGESCREEN]: {
@@ -23,6 +23,13 @@ export default function Header() {
               margin: 0,
             },
             flexWrap: "nowrap",
+            form: {
+              marginRight: SPACING["XL"],
+              marginLeft: SPACING["S"],
+            },
+            "> *": {
+              marginBottom: "0",
+            },
           },
         }}
       >

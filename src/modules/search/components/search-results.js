@@ -7,6 +7,7 @@ import {
   TabPanel,
   SPACING,
   Loading,
+  MEDIA_QUERIES,
 } from "@umich-lib/core"
 import { useSearch, metadata_key } from "./search-provider"
 import Result from "./search-result"
@@ -96,8 +97,10 @@ export default function SearchResults() {
           ".react-tabs__tab-list": {
             paddingTop: SPACING["2XS"],
             background: "white",
-            position: "sticky",
-            top: "0",
+            [MEDIA_QUERIES.LARGESCREEN]: {
+              position: "sticky",
+              top: "0",
+            },
           },
         }}
       >
