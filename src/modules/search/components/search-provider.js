@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react"
 import { Pride } from "pride"
-import { Location } from "@reach/router"
+import router, { Location } from "@reach/router"
 const qs = require("qs")
 
 Pride.Settings.datastores_url =
@@ -17,6 +17,11 @@ const StateProvider = ({ reducer, initialState, children }) => (
 export const useSearch = () => useContext(StateContext)
 
 export default function SearchProvider({ children }) {
+  // TODO
+  // create initial state here.
+
+  console.log("router", router)
+
   const initialState = {
     status: "initializing",
     results: null,
@@ -61,6 +66,10 @@ export default function SearchProvider({ children }) {
       case "addResults":
         return {
           ...state,
+          resultMetadata: {
+            ...state.resultMetadata,
+            ...action.resultMetadata,
+          },
           results: {
             ...state.results,
             ...action.results,
@@ -95,10 +104,7 @@ function useUrlState({ search }) {
 }
 
 function Search({ search }) {
-  const urlState = useUrlState({ search })
-  const [{ status, run, query }, dispatch] = useSearch({
-    query: urlState.query ? urlState.query : "",
-  })
+  const [{ status, run, query }, dispatch] = useSearch()
 
   useEffect(() => {
     if (searcher && run) {
@@ -122,11 +128,11 @@ function Search({ search }) {
   })
 
   useEffect(() => {
-    function handleResults(datastore, data) {
-      if (!data.includes(undefined)) {
+    function handleResults(datastore, results, resultMetadata) {
+      if (!results.includes(undefined)) {
         let result_uids = []
 
-        const records = data.reduce((acc, d) => {
+        const records = results.reduce((acc, d) => {
           d.renderFull(metadata => {
             const record_uid = metadata.datastore + "-" + metadata.uid
 
@@ -147,10 +153,15 @@ function Search({ search }) {
         })
 
         if (result_uids.length > 0) {
+          const uid = datastore.get("uid")
+
           dispatch({
             type: "addResults",
+            resultMetadata: {
+              [uid]: resultMetadata,
+            },
             results: {
-              [datastore.get("uid")]: result_uids,
+              [uid]: result_uids,
             },
           })
         }
@@ -195,7 +206,10 @@ function Search({ search }) {
           data (not the Pride record) to be saved to state.
         */
         search.resultsObservers.add(results => {
-          handleResults(datastore, results)
+          const { total_available } = search.getData()
+          handleResults(datastore, results, {
+            totalAvailable: total_available,
+          })
         })
 
         return search
