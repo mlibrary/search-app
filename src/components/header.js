@@ -1,5 +1,4 @@
 import React from "react"
-import { Link } from "gatsby"
 import { SPACING, MEDIA_QUERIES, Margins } from "@umich-lib/core"
 import Navigation from "./navigation"
 import Logo from "./logo"
@@ -10,9 +9,10 @@ export default function Header() {
     <Margins>
       <header
         css={{
-          margin: `${SPACING["S"]} 0`,
+          marginTop: SPACING["S"],
+          marginBottom: SPACING["2XS"],
           alignItems: "center",
-          "> *:first-child": {
+          "> *": {
             marginBottom: SPACING["S"],
           },
           [MEDIA_QUERIES.LARGESCREEN]: {
@@ -23,6 +23,13 @@ export default function Header() {
               margin: 0,
             },
             flexWrap: "nowrap",
+            form: {
+              marginRight: SPACING["XL"],
+              marginLeft: SPACING["S"],
+            },
+            "> *": {
+              marginBottom: "0",
+            },
           },
         }}
       >

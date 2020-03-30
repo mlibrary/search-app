@@ -1,5 +1,5 @@
 import React from "react"
-import { COLORS, Link, Margins, SPACING } from "@umich-lib/core"
+import { COLORS, Link, Margins, SPACING, MEDIA_QUERIES } from "@umich-lib/core"
 
 export default function Footer() {
   const now = new Date()
@@ -41,12 +41,17 @@ export default function Footer() {
         <Margins>
           <p
             css={{
-              padding: `${SPACING["S"]} 0`,
+              padding: `${SPACING["M"]} 0`,
             }}
           >
             <span
               css={{
-                marginRight: SPACING["2XL"],
+                display: "block",
+                marginBottom: SPACING["XS"],
+                [MEDIA_QUERIES.LARGESCREEN]: {
+                  display: "inline",
+                  marginRight: SPACING["2XL"],
+                },
               }}
             >
               © {year}, Regents of the University of Michigan

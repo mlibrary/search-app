@@ -6,37 +6,59 @@ import {
   Tab,
   TabPanel,
   SPACING,
-  Margins,
   Loading,
+  MEDIA_QUERIES,
 } from "@umich-lib/core"
 import { useSearch, metadata_key } from "./search-provider"
 import Result from "./search-result"
+import Number from "../../../components/number"
+import { Layout, LayoutFull } from "../../reusable"
 
 function DatastoreResults({ uid }) {
-  const [{ results, status }] = useSearch()
+  const [{ results, status, resultMetadata }] = useSearch()
 
   if (results && results[uid]) {
+    const { totalAvailable } = resultMetadata[uid]
+
     return (
-      <ol
-        css={{
-          listStyle: "decimal",
-          listStylePosition: "inside",
-          marginTop: SPACING["M"],
-        }}
-      >
-        {results[uid].slice(0, 10).map(r_uid => (
-          <li
-            key={r_uid}
-            css={{
-              borderBottom: `solid 1px ${COLORS.neutral[100]}`,
-              paddingBottom: SPACING["M"],
-              marginBottom: SPACING["M"],
-            }}
-          >
-            <Result uid={r_uid} />
-          </li>
-        ))}
-      </ol>
+      <Layout>
+        <LayoutFull
+          css={{
+            background: COLORS.blue["100"],
+          }}
+        >
+          <Layout>
+            <p
+              css={{
+                fontWeight: "600",
+                padding: `${SPACING["S"]} 0`,
+              }}
+            >
+              1 to 10 of <Number num={totalAvailable} /> results
+            </p>
+          </Layout>
+        </LayoutFull>
+        <ol
+          css={{
+            listStyle: "decimal",
+            listStylePosition: "inside",
+            marginTop: SPACING["M"],
+          }}
+        >
+          {results[uid].slice(0, 10).map(r_uid => (
+            <li
+              key={r_uid}
+              css={{
+                borderBottom: `solid 1px ${COLORS.neutral[100]}`,
+                paddingBottom: SPACING["M"],
+                marginBottom: SPACING["M"],
+              }}
+            >
+              <Result uid={r_uid} />
+            </li>
+          ))}
+        </ol>
+      </Layout>
     )
   }
 
@@ -58,8 +80,6 @@ function DatastoreResults({ uid }) {
 }
 
 export default function SearchResults() {
-  const [{ results, status }] = useSearch()
-
   return (
     <section aria-label="results">
       <Tabs
@@ -71,6 +91,17 @@ export default function SearchResults() {
               fontSize: "1.125rem",
             },
           },
+          ".react-tabs__tab-panel": {
+            padding: "0",
+          },
+          ".react-tabs__tab-list": {
+            paddingTop: SPACING["2XS"],
+            background: "white",
+            [MEDIA_QUERIES.LARGESCREEN]: {
+              position: "sticky",
+              top: "0",
+            },
+          },
         }}
       >
         <TabList>
@@ -80,9 +111,7 @@ export default function SearchResults() {
         </TabList>
         {Object.keys(metadata_key).map(key => (
           <TabPanel key={key}>
-            <Margins>
-              <DatastoreResults uid={key} />
-            </Margins>
+            <DatastoreResults uid={key} />
           </TabPanel>
         ))}
       </Tabs>

@@ -1,7 +1,22 @@
-/**
- * Implement Gatsby's Browser APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/browser-apis/
- */
+import React from "react"
 
-// You can delete this file if you're not using it
+export const onClientEntry = () => {
+  const {
+    applyPolyfills,
+    defineCustomElements,
+  } = require("@umich-lib/components/loader")
+
+  applyPolyfills().then(() => {
+    defineCustomElements(window)
+  })
+}
+
+export const wrapPageElement = ({ element }) => {
+  return (
+    <React.Fragment>
+      <m-universal-header></m-universal-header>
+      {element}
+      <m-chat></m-chat>
+    </React.Fragment>
+  )
+}

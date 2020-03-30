@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react"
 import { Pride } from "pride"
-import { Location } from "@reach/router"
+import { useLocation, navigate } from "@reach/router"
 const qs = require("qs")
 
 Pride.Settings.datastores_url =
@@ -16,12 +16,42 @@ const StateProvider = ({ reducer, initialState, children }) => (
 
 export const useSearch = () => useContext(StateContext)
 
+function useInitialSearchState() {
+  const location = useLocation()
+  const { query } = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  })
+
+  return {
+    query: query ? query : "",
+    run: query && query.length > 0, // if we have a query
+  }
+}
+
+function createStateInURLString({ query }) {
+  const string = qs.stringify(
+    {
+      query: query.length > 0 ? query : undefined,
+    },
+    {
+      format: "RFC1738",
+      allowDots: true,
+      arrayFormat: "repeat",
+      encodeValuesOnly: true,
+    }
+  )
+
+  return string
+}
+
 export default function SearchProvider({ children }) {
+  const { run, query } = useInitialSearchState()
   const initialState = {
+    run,
+    query: query,
     status: "initializing",
     results: null,
-    run: false,
-    query: "",
+    stateInURLString: "",
   }
 
   function reducer(state, action) {
@@ -49,6 +79,9 @@ export default function SearchProvider({ children }) {
         return {
           ...state,
           query: action.query,
+          stateInURLString: createStateInURLString({
+            query: action.query,
+          }),
         }
       case "addRecords":
         return {
@@ -61,6 +94,10 @@ export default function SearchProvider({ children }) {
       case "addResults":
         return {
           ...state,
+          resultMetadata: {
+            ...state.resultMetadata,
+            ...action.resultMetadata,
+          },
           results: {
             ...state.results,
             ...action.results,
@@ -77,28 +114,17 @@ export default function SearchProvider({ children }) {
   }
 
   return (
-    <Location>
-      {({ location }) => (
-        <StateProvider initialState={initialState} reducer={reducer}>
-          <Search />
-          {children}
-        </StateProvider>
-      )}
-    </Location>
+    <StateProvider initialState={initialState} reducer={reducer}>
+      <Search />
+      {children}
+    </StateProvider>
   )
 }
 
 let searcher
 
-function useUrlState({ search }) {
-  return qs.parse(search, { ignoreQueryPrefix: true })
-}
-
-function Search({ search }) {
-  const urlState = useUrlState({ search })
-  const [{ status, run, query }, dispatch] = useSearch({
-    query: urlState.query ? urlState.query : "",
-  })
+function Search() {
+  const [{ status, run, query, stateInURLString }, dispatch] = useSearch()
 
   useEffect(() => {
     if (searcher && run) {
@@ -121,12 +147,23 @@ function Search({ search }) {
     }
   })
 
+  // Sync the state to the URL
   useEffect(() => {
-    function handleResults(datastore, data) {
-      if (!data.includes(undefined)) {
+    if (stateInURLString.length > 0) {
+      navigate("?" + stateInURLString, { replace: true })
+    } else if (status !== "initializing") {
+      // Only do this after initializing state.
+      navigate("/", { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stateInURLString])
+
+  useEffect(() => {
+    function handleResults(datastore, results, resultMetadata) {
+      if (!results.includes(undefined)) {
         let result_uids = []
 
-        const records = data.reduce((acc, d) => {
+        const records = results.reduce((acc, d) => {
           d.renderFull(metadata => {
             const record_uid = metadata.datastore + "-" + metadata.uid
 
@@ -147,10 +184,15 @@ function Search({ search }) {
         })
 
         if (result_uids.length > 0) {
+          const uid = datastore.get("uid")
+
           dispatch({
             type: "addResults",
+            resultMetadata: {
+              [uid]: resultMetadata,
+            },
             results: {
-              [datastore.get("uid")]: result_uids,
+              [uid]: result_uids,
             },
           })
         }
@@ -167,7 +209,7 @@ function Search({ search }) {
       */
       const datastores = Pride.AllDatastores.array
 
-      datastores.map(datastore => {
+      datastores.forEach(datastore => {
         dispatch({
           type: "addDatastore",
           datastore: {
@@ -195,7 +237,10 @@ function Search({ search }) {
           data (not the Pride record) to be saved to state.
         */
         search.resultsObservers.add(results => {
-          handleResults(datastore, results)
+          const { total_available } = search.getData()
+          handleResults(datastore, results, {
+            totalAvailable: total_available,
+          })
         })
 
         return search
@@ -225,7 +270,7 @@ function Search({ search }) {
         },
       })
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   return null
 }

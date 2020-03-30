@@ -1,5 +1,5 @@
 import React from "react"
-import { SPACING, COLORS, TYPOGRAPHY } from "@umich-lib/core"
+import { SPACING } from "@umich-lib/core"
 import { ChooseAffiliation } from "../modules/affiliation"
 
 export default function Navigation() {
