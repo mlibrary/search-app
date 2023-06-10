@@ -10,7 +10,7 @@
     "@reach/visually-hidden": "^0.8.2",
     "@umich-lib/components": "0.0.1-alpha.6",
     "@umich-lib/core": "^2.0.6",
-    "gatsby": "^2.19.7",
+    "gatsby": "^4.25.7",
     "gatsby-image": "^2.2.39",
     "gatsby-plugin-emotion": "^4.1.22",
     "gatsby-plugin-manifest": "^2.2.39",
